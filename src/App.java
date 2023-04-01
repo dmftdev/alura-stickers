@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,13 +29,20 @@ public class App {
 
         // exibir e manipular os dados
         //InputStream inputStream = new URL("https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopTVs_2.jpg").openStream();
+
+        
         for (Map<String, String> filme : listaDeFilmes) {
-            System.out.println("Título: " + "\u001b[31m" + filme.get("title") + "\u001b[m");
-            System.out.println("Cartaz: " + "\u001b[4m" + filme.get("image") + "\u001b[m");
-            var nota = filme.get("imDbRating");            
-            var notaInteger = Math.round(Float.parseFloat(nota));
-            System.out.println("Nota: " + "\u001b[1m" + nota + "\u001b[m");
-            System.out.println(String.join("", Collections.nCopies(notaInteger, "⭐️")));
+            String urlImagem = filme.get("image");
+            String titulo = filme.get("title");
+
+            InputStream inputStream = new URL(urlImagem).openStream();
+            String nomeArquivo = "saida/" + titulo + ".png";
+
+            var geradora = new GeradoraDeFigurinhas();
+            geradora.cria(inputStream, nomeArquivo);
+
+            System.out.println(titulo);
+            System.out.println();
             
         }
 
